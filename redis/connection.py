@@ -889,7 +889,10 @@ class ConnectionPool(object):
         self._checkpid()
         if connection.pid != self.pid:
             return
-        self._in_use_connections.remove(connection)
+        try:
+            self._in_use_connections.remove(connection)
+        except (KeyError, ValueError):
+            pass
         self._available_connections.append(connection)
 
     def disconnect(self):
